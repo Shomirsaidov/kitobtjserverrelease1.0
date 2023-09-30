@@ -149,7 +149,8 @@ app.post('/login',(req,res) => {
     const data = [req.body.tel,req.body.password]
     console.log(data)
 
-    query("SELECT * FROM `clients` WHERE `tel` = '" + data[0] + "' OR `email` = '" + data[0] +  "' AND `password` = '" + data[1] + "'")
+    if(data[0].length > 0 && data[1].length > 0) {
+        query("SELECT * FROM `clients` WHERE `tel` = '" + data[0] + "' OR `email` = '" + data[0] +  "' AND `password` = '" + data[1] + "'")
         .then(r => {
             console.log(r)
             if(r.length > 0) {
@@ -158,6 +159,10 @@ app.post('/login',(req,res) => {
                 res.send({status: 401, error: 'Неправильная почта или пароль !'})
             }
         })
+    } else {
+        res.send({status: 401, error: 'Неправильная почта или пароль !'})
+    }
+   
 
 })
 
