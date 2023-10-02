@@ -187,6 +187,14 @@ app.post('/makeOrder',(req,res) => {
 })
 
 
+app.post('/deleteBook/:id', (req,res) => {
+    query("delete from `books` where `id` =" + req.params['id'])
+    .then(r => {
+        console.log('Deleted !')
+        res.send('Deleted !').status(200)
+    })
+})
+
 
 
 app.post('/getOrders',(req,res) => {
