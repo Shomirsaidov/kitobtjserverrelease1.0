@@ -64,14 +64,14 @@ app.get('/getMainData', (req,res) => {
     
     let preparedData = {sales: null, newBooks: null,topSelling: null}
 
-    query("SELECT * FROM `books` WHERE `tags` LIKE '%скидки%' OR `sales_per` > 0 ORDER BY RAND() LIMIT 10")
+    query("SELECT * FROM `books` WHERE `tags` LIKE '%скидки%' OR `sales_per` > 0 ORDER BY RAND() LIMIT 25")
         .then(r => {
             preparedData.sales = r
-            return query("SELECT * FROM `books` WHERE `tags` LIKE '%топ продаж%' ORDER BY RAND() LIMIT 10")
+            return query("SELECT * FROM `books` WHERE `tags` LIKE '%топ продаж%' ORDER BY RAND() LIMIT 25")
         })
         .then(r => {
             preparedData.topSelling = r
-            return query("SELECT * FROM `books` ORDER BY `id` DESC LIMIT 10")
+            return query("SELECT * FROM `books` ORDER BY `id` DESC LIMIT 35")
         })  
         .then(r => {
             preparedData.newBooks = r
