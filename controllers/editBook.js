@@ -6,7 +6,7 @@ module.exports = (req,res) => {
 	query_data[4] = (req.body.cur_price - req.body.prev_price) / req.body.prev_price * 100
 
 	if(!isFinite(query_data[4])) {
-		query_data = 0
+		query_data[4] = 0
 	}
 	
 	queryData("UPDATE `books` SET `name` = ?, `author` = ?, `cur_price` = ?, `prev_price` = ? , `sales_per` = ?,`description` = ?,`cover` = ?, `tags` = ?, `category` = ?, `publisher` = ? ,`release_year` = ?,`isbn` = ?, `pages` = ?, `size` = ?, `cover_type` = ? ,`weight` = ?,`age_restrictions` = ?, `presented` = ? WHERE `id` = ?", query_data)
