@@ -5,7 +5,7 @@ module.exports = (req,res) => {
 	query_data = [req.body.name,req.body.author, req.body.cur_price,req.body.prev_price,req.body.sales_per,req.body.description,req.body.cover, req.body.tags,req.body.category,req.body.publisher,req.body.release_year,req.body.isbn, req.body.pages,req.body.size,req.body.cover_type,req.body.weight,req.body.age_restrictions, req.body.presented, req.body.id]
 	query_data[4] = (req.body.cur_price - req.body.prev_price) / req.body.prev_price * 100
 
-	if(!isFinite(query_data[4])) {
+	if(!isFinite(query_data[4]) || query_data[4] == '') {
 		query_data[4] = 0
 	}
 	
