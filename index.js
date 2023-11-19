@@ -46,7 +46,7 @@ app.post('/add',async (req,res) => {
     console.log(data)
 
   
-    data[4] = (req.body.cur_price - req.body.prev_price) / req.body.prev_price * 100
+    data[4] =  (req.body.prev_price - req.body.cur_price) / (req.body.prev_price / 100)
     if(isFinite(data[4])) {
         console.log('Added') 
     } else {
