@@ -46,7 +46,7 @@ app.post('/add',async (req,res) => {
     console.log(data)
 
   
-    data[4] = (req.body.prev_price - req.body.cur_price) / (req.body.prev_price / 100) 
+    data[4] = 100 - req.body.cur_price / (req.body.prev_price / 100)
     
     console.log(data[4])
     const sql = "INSERT INTO `books` (`id`, `name`, `author`, `cur_price`, `prev_price`, `sales_per`,`description`, `cover`, `tags`, `category`, `publisher`, `release_year`, `isbn`, `pages`, `size`, `cover_type`, `weight`, `age_restrictions`, `presented`) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
