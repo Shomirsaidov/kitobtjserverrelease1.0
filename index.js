@@ -13,6 +13,7 @@ const mailer = require('./mailer')
 const editBook = require('./controllers/editBook.js')
 const getOrders = require('./controllers/getOrders.js')
 const editOrderStatus = require('./controllers/editOrderStatus.js')
+const getRole = require('./controllers/getRole.js')
 
 
 const app = express()
@@ -45,36 +46,33 @@ app.post('/add',async (req,res) => {
 
     console.log(data)
 
-  
-    data[4] =  (req.body.prev_price - req.body.cur_price) / (req.body.prev_price / 100)
-    if(isFinite(data[4])) {
-        console.log('Added') 
-    } else {
-        data[4] = 0
-    }
-    
+    // if(req.body.tags.includes('скидки')) {
+    data[4] = (req.body.prev_price - req.body.cur_price) / (req.body.prev_price / 100) 
+    // }
     console.log(data[4])
-    const sql = "INSERT INTO `books` (`id`, `name`, `author`, `cur_price`, `prev_price`, `sales_per`,`description`, `cover`, `tags`, `category`, `publisher`, `release_year`, `isbn`, `pages`, `size`, `cover_type`, `weight`, `age_restrictions`, `presented`) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";        
+    const sql = "INSERT INTO `books` (`id`, `name`, `author`, `cur_price`, `prev_price`, `sales_per`,`description`, `cover`, `tags`, `category`, `publisher`, `release_year`, `isbn`, `pages`, `size`, `cover_type`, `weight`, `age_restrictions`, `presented`) VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+
     await queryData(sql, data).then(r => {
         res.send("Данные добавлены")
     })
    
     
-
+ 
 })
 
 app.get('/getMainData', (req,res) => {
     
     let preparedData = {sales: null, newBooks: null,topSelling: null}
 
-    query("SELECT * FROM `books` WHERE `tags` LIKE '%скидки%' OR `sales_per` > 0 ORDER BY RAND() LIMIT 25")
+    query("SELECT * FROM `books` WHERE `tags` LIKE '%скидки%' OR `sales_per` > 0 ORDER BY RAND() LIMIT 10")
         .then(r => {
             preparedData.sales = r
-            return query("SELECT * FROM `books` WHERE `tags` LIKE '%топ продаж%' ORDER BY RAND() LIMIT 25")
+            return query("SELECT * FROM `books` WHERE `tags` LIKE '%топ продаж%' ORDER BY RAND() LIMIT 10")
         })
         .then(r => {
             preparedData.topSelling = r
-            return query("SELECT * FROM `books` ORDER BY `id` DESC LIMIT 35")
+            return query("SELECT * FROM `books` ORDER BY `id` DESC LIMIT 10")
         })  
         .then(r => {
             preparedData.newBooks = r
@@ -131,17 +129,25 @@ app.post('/signup/',(req,res) => {
     const token = uuid4()
     const data = [req.body.username, req.body.email,req.body.tel,req.body.password,token]
     console.log(data)
-    if(req.body.username.length > 2 && req.body.email.length > 5 && req.body.password.length > 5
-        && req.body.tel.length > 6) {
-            queryData("INSERT INTO `clients`(`id`,`username`,`email`,`tel`,`password`,`token`) VALUES(NULL,?,?,?,?,?)", data)
-            .then(r => {
-                res.send({token: token,status: 200,username: req.body.username,tel: req.body.tel,email: req.body.email})
-            })
-        } else {
-            console.log('error')
-            res.send({status: 401, error: 'Введите правильные данные !'})
-        }
-   
+    query("SELECT * FROM `clients` WHERE `email` = '" + data[1] +"'")
+        .then(r => {
+            console.log(r)
+            if(!r.length) {
+                if(req.body.username.length > 2 && req.body.email.length > 5 && req.body.password.length > 5
+                    && req.body.tel.length > 6) {
+                        queryData("INSERT INTO `clients`(`id`,`username`,`email`,`tel`,`password`,`token`) VALUES(NULL,?,?,?,?,?)", data)
+                        .then(r => {
+                            res.send({token: token,status: 200,username: req.body.username,tel: req.body.tel,email: req.body.email})
+                        })
+                    } else {
+                        console.log('error')
+                        res.send({status: 401, error: 'Введите правильные данные !'})
+                    }
+               
+            } else {
+                res.send({status: 401, error: 'Пользователь уже существует !'})
+            }
+        })
 
 })
 
@@ -223,6 +229,7 @@ app.post('/getOrders',(req,res) => {
 
 app.post('/editBook',editBook)
 app.post('/editOrderStatus', editOrderStatus)
+app.post('/getRole', getRole)
 app.get('/orders', getOrders)
 
 
