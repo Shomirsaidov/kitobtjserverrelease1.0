@@ -5,6 +5,7 @@ const queryData = require('./conn_query.js')
 const db = require('./connect.js')
 const swaggerUI = require('swagger-ui-express')
 const swDocument =  require('./docs/basicInfo.js')
+const cors = require('cors')
 
 
 const uuid4 = require('uuid4')
