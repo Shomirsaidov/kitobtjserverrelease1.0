@@ -19,7 +19,13 @@ const getRole = require('./controllers/getRole.js')
 const app = express()
 require('dotenv').config();
 const PORT = process.env.PORT
+const corsOptions = {
+  origin: 'https://www.kitob.tj', 
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
+
+app.use(cors(corsOptions));
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swDocument))
