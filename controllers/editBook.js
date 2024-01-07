@@ -11,6 +11,6 @@ module.exports = (req,res) => {
 	
 	queryData("UPDATE `books` SET `name` = ?, `author` = ?, `cur_price` = ?, `prev_price` = ? , `sales_per` = ?,`description` = ?,`cover` = ?, `tags` = ?, `category` = ?, `publisher` = ? ,`release_year` = ?,`isbn` = ?, `pages` = ?, `size` = ?, `cover_type` = ? ,`weight` = ?,`age_restrictions` = ?, `presented` = ? WHERE `id` = ?", query_data)
 		.then(r => {
-			res.redirect(process.env.CLIENT_URL  + '/#/book/' + query_data[query_data.length - 1])
+			res.redirect(process.env.CLIENT_URL  + '/book/' + query_data[query_data.length - 1])
 		})
 }
