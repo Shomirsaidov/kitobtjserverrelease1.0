@@ -3,7 +3,6 @@ const mysql = require('mysql2/promise'); // Import mysql2/promise module
 require('dotenv').config()
 
 var pool = mysql.createPool({
-	connectionLimit: 40,
 	host: process.env.DB_HOST,
 	user: process.env.DB_USER,
 	database: process.env.DB_NAME,
