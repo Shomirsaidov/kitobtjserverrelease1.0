@@ -90,6 +90,7 @@ app.get('/getMainData', (req,res) => {
 })
 
 
+
 app.get('/getBook/:id',(req,res) => {
     const book_id = [req.params['id']]
     console.log('required a book !' + book_id)
@@ -105,7 +106,7 @@ app.get('/getBook/:id',(req,res) => {
 app.get('/find/:input',(req,res) => {
     const input = [req.params['input']]
 
-    query("SELECT * FROM `books` WHERE `name` LIKE '%" + input + "%' OR `author` LIKE '%" + input + "%' OR `tags` LIKE '%" + input + "%' OR `category` LIKE '%" + input + "%'")
+    query("SELECT * FROM `books` WHERE `name` LIKE '%" + input + "%' OR `author` LIKE '%" + input + "%' OR `tags` LIKE '%" + input + "%' OR `category` LIKE '%" + input + "%' ORDER BY RAND()")
         .then(r => {
             res.send(r)
         })
